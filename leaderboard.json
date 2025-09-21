@@ -1,14 +1,20 @@
 [
   {
+    "name": "jonh",
+    "score": 8,
+    "win": 1,
+    "lose": 0
+  },
+  {
     "name": "jet",
-    "score": 18
+    "score": 60,
+    "win": 6,
+    "lose": 1
   },
   {
     "name": "jame",
-    "score": 19
-  },
-  {
-    "name": "jonh",
-    "score": 9
+    "score": 10,
+    "win": 1,
+    "lose": 0
   }
 ]

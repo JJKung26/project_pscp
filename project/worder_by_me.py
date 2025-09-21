@@ -15,7 +15,7 @@ from word import WORDS_BY_LEVEL  #(แยกไฟล์คลังคำศั
 #=================
 filename = 'leaderboard.json' #ไฟล์เก็บคะแนน
 #=============
-def leader_bord(name, score):
+def leader_bord(name, score, win, lose):#ฟังก์ชันบันทึกคะแนนผู้เล่น
     '''บันทึกประวัติคะแนนผู้เล่น'''
     #ถ้าไม่มีไฟล์ก็สร้างใหม่
     if not os.path.exists(filename):
@@ -29,15 +29,25 @@ def leader_bord(name, score):
     for player in data:
         if player['name'] == name:
             player['score'] += score #ถ้ามีผู้เล่นในไฟล์ก็เพิ่มคะแนน
+            player['win'] += win
+            player['lose'] += lose
+            latest_score = player['score']
+            latest_win = player['win']
+            latest_lose = player['lose']
             found = True
             break
     #ถ้าไม่มีผู้เล่นในไฟล์ก็เพิ่มผู้เล่นใหม่
     if not found:
-        data.append({'name': name, 'score': score})
+        data.append({'name': name, 'score': score, 'win': win, 'lose': lose})
+        latest_score = score
+    #โชว์คะแนนสะสมและwin lose
+    win_lose = 'win:{} lose:{}'.format(latest_win, latest_lose)
     #เซฟ
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+    return win_lose, latest_score
+#=================
 def game_logic(answer, random_word):#logicเช็คคำตอบของเกม
     '''ฟังก์ชันตรวจคำถูกผิดของเกม'''
     answer_liist = []
@@ -52,16 +62,17 @@ def game_logic(answer, random_word):#logicเช็คคำตอบของ�
 
 def game_play(random_word, random_category, level):
     '''ฟังก์ชันเกม'''
-    player_name = input('กรุณาใส่ชื่อผู้เล่น: ')
+
     won = False #ค่าเริ่มต้น
+    win = 0
+    lose = 0
     round_limit = 6 #จำนวนรอบสูงสุด
     player_round = 0 #จำนวนรอบเริ่มต้นของผู้เล่น
     player_point = 10 #คะแนนเริ่มต้นของผู้เล่น
     
     while player_round < round_limit:#ผู้เล่นทายได้ไม่เกิน6ครั้ง
-        n = 0
         player_round += 1
-        print(f'ทายรอบที่ {n + 1} หากทายถูกในรอบนี้จะได้รับ {player_point} คะแนน')
+        print(f'ทายรอบที่ {player_round} หากทายถูกในรอบนี้จะได้รับ {player_point} คะแนน')
         user_answer = input().upper()
         answer = game_logic(user_answer, random_word)
         print(f'ทายครั้งที่ {player_round}')
@@ -84,26 +95,29 @@ def game_play(random_word, random_category, level):
 
     if won is True:#ถ้าชนะ
         print(f'คุณชนะรอบนี้! คำตอบคือ',end=' ')
-
+        win += 1
     else:#ถ้าแพ้
         print('คุณแพ้รอบนี้! คำตอบคือ',end=' ')
         player_point = 0 #ถ้าแพ้คะแนนเป็น0
+        lose += 1
     print(f"{random_word} คุณได้รับคะแนน {player_point} คะแนน")
-    return player_name,player_point
+    return player_point,win,lose
 
 def main():#รอไปก่อนเดี๋ยวมาทำ
     '''ฟังก์ชันหลัก'''
     while True:
+        username = input('กรุณาใส่ชื่อผู้เล่น: ')
         #=====สุ่มคำ=====
         ALL_CATEGORIES = ["animals","fruits","tools","instruments","colors"]
-        level = 'easy'
+        level = input('เลือกความยาก (easy, medium, hard): ').lower()
         random_category = random.choice(ALL_CATEGORIES)
         random_word = random.choice(WORDS_BY_LEVEL[level][random_category])
         #===============
-        print(random_word)#เอาใว้เช็คเฉยๆว่ามันรันได้และรันอ่ะไรมา
+        print(f'เฉลยสำหรับเช็คคือ {random_word}')#เอาใว้เช็คเฉยๆว่ามันรันได้และรันอ่ะไรมา
 
-        username, userpoint = game_play(random_word, random_category, level)
-        leader_bord(username, userpoint)#บันทึกชื่อและคะแนนผู้เล่น
+        userpoint, win, lose = game_play(random_word, random_category, level)
+        show_win_lose, total_point = leader_bord(username, userpoint, win, lose)#บันทึกชื่อและคะแนนผู้เล่น
+        print(f'คะแนนสะสมของคุณ {username} คือ {total_point} คะแนน ประวัติแพ้/ชนะ:{show_win_lose}')#โชว์คะแนนสะสมและ win lose
         if input("เล่นอีกไหม? (y/n) ").lower() == 'y':
             continue
         else:
