@@ -13,7 +13,7 @@ import json
 import os
 from word import WORDS_BY_LEVEL  #(แยกไฟล์คลังคำศัพท์)
 #=================
-filename = 'leaderbord.json' #ไฟล์เก็บคะแนน
+filename = 'leaderboard.json' #ไฟล์เก็บคะแนน
 #=============
 def leader_bord(name, score):
     '''บันทึกประวัติคะแนนผู้เล่น'''
@@ -59,7 +59,9 @@ def game_play(random_word, random_category, level):
     player_point = 10 #คะแนนเริ่มต้นของผู้เล่น
     
     while player_round < round_limit:#ผู้เล่นทายได้ไม่เกิน6ครั้ง
+        n = 0
         player_round += 1
+        print(f'ทายรอบที่ {n + 1} หากทายถูกในรอบนี้จะได้รับ {player_point} คะแนน')
         user_answer = input().upper()
         answer = game_logic(user_answer, random_word)
         print(f'ทายครั้งที่ {player_round}')

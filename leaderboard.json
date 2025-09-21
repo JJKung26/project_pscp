@@ -1,21 +1,14 @@
-{
-  "players": {
-    "jet": {
-      "best_score": 10,
-      "total_score": 10,
-      "games": 1,
-      "history": [
-        {
-          "difficulty": "easy",
-          "category": "tools",
-          "answer": "TABLE",
-          "attempts_allowed": 6,
-          "attempts_used": 6,
-          "won": true,
-          "used_hint": true,
-          "score": 10
-        }
-      ]
-    }
+[
+  {
+    "name": "jet",
+    "score": 18
+  },
+  {
+    "name": "jame",
+    "score": 19
+  },
+  {
+    "name": "jonh",
+    "score": 9
   }
-}
+]
