@@ -11,7 +11,31 @@
 import random
 import json
 import os
-from word import WORDS_BY_LEVEL  #(แยกไฟล์คลังคำศัพท์)
+#from word import WORDS_BY_LEVEL  #(แยกไฟล์คลังคำศัพท์)
+
+WORDS_BY_LEVEL = {
+    "easy": {
+        "animals": ["PANDA", "SHEEP", "HORSE", "GOOSE", "EAGLE", "ZEBRA", "WHALE"],
+        "fruits":  ["APPLE", "MANGO", "GRAPE", "LEMON", "PEACH"],
+        "tools":   ["RULER", "PHONE", "BOOKS", "TABLE"],
+        "instruments": ["AUDIO", "PIANO", "MUSIC", "SOUND", "DRUMS"],
+        "colors":  ["GREEN", "BLACK", "BROWN", "WHITE"]
+    },
+    "medium": {
+        "animals": ["HIPPO", "RHINO", "SNAIL"],
+        "fruits":  ["MELON", "OLIVE", "BERRY", "GUAVA"],
+        "tools":   ["PAPER", "SPOON", "CLOCK"],
+        "instruments": ["STAGE", "DANCE", "ALBUM"],
+        "colors":  ["CREAM", "LEMON", "PEACH"]
+    },
+    "hard": {
+        "animals": ["HYENA", "SHARK", "SLOTH"],
+        "fruits":  ["PLUMS", "COCOA"],
+        "tools":   ["BRUSH", "PLATE", "DOLLS"],
+        "instruments": ["RHYME", "REMIX", "MIXER", "OPERA", "BANDS"],
+        "colors":  ["BEIGE", "AZURE", "AMBER"]
+    }
+}
 #=================
 filename = 'leaderboard.json' #ไฟล์เก็บคะแนน
 #=============
@@ -40,6 +64,8 @@ def leader_bord(name, score, win, lose):#ฟังก์ชันบันทึ
     if not found:
         data.append({'name': name, 'score': score, 'win': win, 'lose': lose})
         latest_score = score
+        latest_win = data[-1].get('win', 0)
+        latest_lose = data[-1].get('lose', 0)
     #โชว์คะแนนสะสมและwin lose
     win_lose = 'win:{} lose:{}'.format(latest_win, latest_lose)
     #เซฟ
@@ -51,6 +77,7 @@ def leader_bord(name, score, win, lose):#ฟังก์ชันบันทึ
 def game_logic(answer, random_word):#logicเช็คคำตอบของเกม
     '''ฟังก์ชันตรวจคำถูกผิดของเกม'''
     answer_liist = []
+
     for i in range(len(random_word)):
         if answer[i] == random_word[i]:
             answer_liist.append('🟩')
@@ -74,6 +101,10 @@ def game_play(random_word, random_category, level):
         player_round += 1
         print(f'ทายรอบที่ {player_round} หากทายถูกในรอบนี้จะได้รับ {player_point} คะแนน')
         user_answer = input().upper()
+        if len(user_answer) != len(random_word) or not user_answer.isalpha():#เช็คความยาวคำตอบ
+            print(f'คำตอบต้องมีความยาว {len(random_word)} ตัวอักษร หรือ ต้องมีเป็นตัวอักษร A-Z กรุณาลองใหม่')
+            player_round -= 1 #ถ้าความยาวไม่ตรงจะไม่ถูกนับเป็นรอบ
+            continue
         answer = game_logic(user_answer, random_word)
         print(f'ทายครั้งที่ {player_round}')
         print(answer)
@@ -109,9 +140,14 @@ def main():#รอไปก่อนเดี๋ยวมาทำ
         username = input('กรุณาใส่ชื่อผู้เล่น: ')
         #=====สุ่มคำ=====
         ALL_CATEGORIES = ["animals","fruits","tools","instruments","colors"]
-        level = input('เลือกความยาก (easy, medium, hard): ').lower()
-        random_category = random.choice(ALL_CATEGORIES)
-        random_word = random.choice(WORDS_BY_LEVEL[level][random_category])
+        while True:
+            level = input('เลือกความยาก (easy, medium, hard): ').lower()
+            if level in WORDS_BY_LEVEL:
+                random_category = random.choice(ALL_CATEGORIES)
+                random_word = random.choice(WORDS_BY_LEVEL[level][random_category])
+                break
+            else:
+                print("ระดับความยากไม่ถูกต้อง กรุณาเลือกใหม่")
         #===============
         print(f'เฉลยสำหรับเช็คคือ {random_word}')#เอาใว้เช็คเฉยๆว่ามันรันได้และรันอ่ะไรมา
 
