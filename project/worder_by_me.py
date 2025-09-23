@@ -5,37 +5,13 @@
 #ทำhint
 #ทำระบบเลือกความยาก
 #เซฟคะแนนผู้เล่น
-
 #=================
 
 import random
 import json
 import os
-#from word import WORDS_BY_LEVEL  #(แยกไฟล์คลังคำศัพท์)
+from word  import WORDS_BY_LEVEL, ALL_TITLES  #(แยกไฟล์คลังคำศัพท์)
 
-WORDS_BY_LEVEL = {
-    "easy": {
-        "animals": ["PANDA", "SHEEP", "HORSE", "GOOSE", "EAGLE", "ZEBRA", "WHALE"],
-        "fruits":  ["APPLE", "MANGO", "GRAPE", "LEMON", "PEACH"],
-        "tools":   ["RULER", "PHONE", "BOOKS", "TABLE"],
-        "instruments": ["AUDIO", "PIANO", "MUSIC", "SOUND", "DRUMS"],
-        "colors":  ["GREEN", "BLACK", "BROWN", "WHITE"]
-    },
-    "medium": {
-        "animals": ["HIPPO", "RHINO", "SNAIL"],
-        "fruits":  ["MELON", "OLIVE", "BERRY", "GUAVA"],
-        "tools":   ["PAPER", "SPOON", "CLOCK"],
-        "instruments": ["STAGE", "DANCE", "ALBUM"],
-        "colors":  ["CREAM", "LEMON", "PEACH"]
-    },
-    "hard": {
-        "animals": ["HYENA", "SHARK", "SLOTH"],
-        "fruits":  ["PLUMS", "COCOA"],
-        "tools":   ["BRUSH", "PLATE", "DOLLS"],
-        "instruments": ["RHYME", "REMIX", "MIXER", "OPERA", "BANDS"],
-        "colors":  ["BEIGE", "AZURE", "AMBER"]
-    }
-}
 #=================
 filename = 'leaderboard.json' #ไฟล์เก็บคะแนน
 #=============
@@ -76,16 +52,19 @@ def leader_bord(name, score, win, lose):#ฟังก์ชันบันทึ
 #=================
 def game_logic(answer, random_word):#logicเช็คคำตอบของเกม
     '''ฟังก์ชันตรวจคำถูกผิดของเกม'''
-    answer_liist = []
+    answer_list = ['⬜'] * len(random_word)
+    char_list = list(random_word)
 
-    for i in range(len(random_word)):
+    for i in range(len(random_word)):#เช็คหาตำแหน่งตัวอักษรที่ถูกต้องและตำแหน่งถูกต้อง
         if answer[i] == random_word[i]:
-            answer_liist.append('🟩')
-        elif answer[i] in random_word:
-            answer_liist.append('🟨')
-        else:
-            answer_liist.append('⬜')
-    return ''.join(answer_liist)
+            answer_list[i] = '🟩'
+            char_list[i] = None #ลบตัวอักษรที่ถูกต้องออกจากลanswer_list
+
+    for i in range(len(random_word)):#เช็คหาตำแหน่งตัวอักษรที่ถูกต้องแต่ตำแหน่งไม่ถูกต้อง
+        if answer_list[i] == '⬜' and answer[i] in char_list:
+            answer_list[i] = '🟨'
+            char_list[char_list.index(answer[i])] = None #ลบตัวอักษรที่ถูกต้องออกจากลanswer_list
+    return ''.join(answer_list)
 
 def game_play(random_word, random_category, level):
     '''ฟังก์ชันเกม'''
@@ -93,9 +72,12 @@ def game_play(random_word, random_category, level):
     won = False #ค่าเริ่มต้น
     win = 0
     lose = 0
-    round_limit = 6 #จำนวนรอบสูงสุด
     player_round = 0 #จำนวนรอบเริ่มต้นของผู้เล่น
     player_point = 10 #คะแนนเริ่มต้นของผู้เล่น
+    if level == 'easy':#จำนวนรอบสูงสุด
+        round_limit = 10
+    else:
+        round_limit = 6
     
     while player_round < round_limit:#ผู้เล่นทายได้ไม่เกิน6ครั้ง
         player_round += 1
@@ -118,8 +100,8 @@ def game_play(random_word, random_category, level):
             if level == 'easy':#ถ้าโหมดง่าย
                 print(f'ใบ้หมวดหมู่: {random_category}')#ใบ้หมวดหมู่
             if level == 'medium':#ถ้าโหมดกลาง
-                user_input = input('ต้องการใบ้หมวดหมู่ไหม? แต่แลกกับ 1 คะแนนนะ (y/n)')#ถามว่าต้องการใบ้ไหม
-                if user_input.lower() == 'y':#ถ้าตอบใช่
+                user_input = input('ต้องการใบ้หมวดหมู่ไหม? แต่แลกกับ 1 คะแนนนะ (yes/no) :')#ถามว่าต้องการใบ้ไหม
+                if user_input.lower() == 'yes':#ถ้าตอบใช่
                     print(f'ใบ้หมวดหมู่: {random_category}')#ใบ้หมวดหมู่
                 else:
                     pass
@@ -139,12 +121,14 @@ def main():#รอไปก่อนเดี๋ยวมาทำ
     while True:
         username = input('กรุณาใส่ชื่อผู้เล่น: ')
         #=====สุ่มคำ=====
-        ALL_CATEGORIES = ["animals","fruits","tools","instruments","colors"]
+        ALL_CATEGORIES = ALL_TITLES
+        LEVEL_LIST = ["easy", "medium", "hard"]
+        #===============
         while True:
             level = input('เลือกความยาก (easy, medium, hard): ').lower()
-            if level in WORDS_BY_LEVEL:
+            if level in LEVEL_LIST:
                 random_category = random.choice(ALL_CATEGORIES)
-                random_word = random.choice(WORDS_BY_LEVEL[level][random_category])
+                random_word = random.choice(WORDS_BY_LEVEL[random_category])
                 break
             else:
                 print("ระดับความยากไม่ถูกต้อง กรุณาเลือกใหม่")
@@ -154,7 +138,7 @@ def main():#รอไปก่อนเดี๋ยวมาทำ
         userpoint, win, lose = game_play(random_word, random_category, level)
         show_win_lose, total_point = leader_bord(username, userpoint, win, lose)#บันทึกชื่อและคะแนนผู้เล่น
         print(f'คะแนนสะสมของคุณ {username} คือ {total_point} คะแนน ประวัติแพ้/ชนะ:{show_win_lose}')#โชว์คะแนนสะสมและ win lose
-        if input("เล่นอีกไหม? (y/n) ").lower() == 'y':
+        if input("เล่นอีกไหม? (yes/no) ").lower() == 'yes':
             continue
         else:
             print("จบเกม ขอบคุณที่เล่น!")
