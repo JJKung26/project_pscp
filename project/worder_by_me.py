@@ -13,20 +13,6 @@ from word  import WORDS_BY_LEVEL, ALL_TITLES  #(แยกไฟล์คลั�
 #=================
 filename = 'leaderboard.json' #ไฟล์เก็บคะแนน
 #=============
-def show_leaderboard():#ฟังก์ชันแสดงอันดับผู้เล่น
-    '''ฟังก์ชันแสดงคะแนนผู้เล่น'''
-    # โหลดข้อมูล
-with open(filename, "r", encoding="utf-8") as f:
-    data = json.load(f)
-
-# sort จากคะแนนมากไปน้อย
-data.sort(key=lambda x: x["score"], reverse=True)
-
-# print leaderboard
-print("===== Leaderboard =====")
-for i, player in enumerate(data, start=1):
-    print(f"{i}. {player['name']} | Score: {player['score']} | Win: {player['win']} | Lose: {player['lose']}")
-print("=======================")
 
 def leader_bord(name, score, win, lose):#ฟังก์ชันบันทึกคะแนนผู้เล่น
     '''บันทึกประวัติคะแนนผู้เล่น'''
@@ -57,9 +43,21 @@ def leader_bord(name, score, win, lose):#ฟังก์ชันบันทึ
         latest_lose = data[-1].get('lose', 0)
     #โชว์คะแนนสะสมและwin lose
     win_lose = 'win:{} lose:{}'.format(latest_win, latest_lose)
+
+    # sort จากคะแนนมากไปน้อย
+    data.sort(key=lambda x: x["score"], reverse=True)
+
+    # print leaderboard
+    print("===== Leaderboard =====")
+    for i, player in enumerate(data, start=1):
+            if i == 6:
+                break
+            print(f"{i}. {player['name']} | Score: {player['score']} | Win: {player['win']} | Lose: {player['lose']}")
+    print("=======================")
     #เซฟ
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    
 
     return win_lose, latest_score
 #=================
@@ -133,6 +131,7 @@ def game_play(random_word, random_category, level,point_rate):#ฟังก์�
 
 def main():#รอไปก่อนเดี๋ยวมาทำ
     '''ฟังก์ชันหลัก'''
+
     while True:
         username = input('กรุณาใส่ชื่อผู้เล่น: ')
         #=====สุ่มคำ=====
@@ -149,12 +148,11 @@ def main():#รอไปก่อนเดี๋ยวมาทำ
             else:
                 print("ระดับความยากไม่ถูกต้อง กรุณาเลือกใหม่")
         #===============
-        print(f'\nเฉลยสำหรับเช็คคือ {random_word}')#เอาใว้เช็คเฉยๆว่ามันรันได้และรันอ่ะไรมา
+        #print(f'\nเฉลยสำหรับเช็คคือ {random_word}')#เอาใว้เช็คเฉยๆว่ามันรันได้และรันอ่ะไรมา
 
         userpoint, win, lose = game_play(random_word, random_category, level, MULTIPLIER)#เล่นเกม
         show_win_lose, total_point = leader_bord(username, (userpoint * MULTIPLIER[level]), win, lose)#บันทึกชื่อและคะแนนผู้เล่น
         print(f'คะแนนสะสมของคุณ {username} คือ {total_point} คะแนน ประวัติแพ้/ชนะ:{show_win_lose}')#โชว์คะแนนสะสมและ win lose
-        show_leaderboard()#โชว์ตารางคะแนน
         if input("\nเล่นอีกไหม? (yes/no) ").lower() == 'yes':
             continue
         else:
