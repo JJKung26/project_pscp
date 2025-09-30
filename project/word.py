@@ -14,4 +14,3 @@ WORDS_BY_LEVEL = {
         "emotions": ["HAPPY", "ANGRY", "PROUD", "SCARE", "SORRY", "WORRY", "RELAX", "SHOCK", "GLORY"],
         "music": ["PIANO", "GUITAR", "SAXON", "TRUMP", "BASSO", "CELLO", "FLUTE", "DRUMS", "VOICE", "CHORD", "NOTES", "LYRIC", "SCALE", "OPERA"]
     }
-ALL_TITLES = ["animals","fruits","objects","instruments","colors", "body_parts","food","countrys","jobs","sports","nature","time","emotions","music"]
