@@ -52,8 +52,8 @@ def leaderboard(name, score, win, lose):#ฟังก์ชันบันทึ
     print("\n" + "=" * 60)
     # แสดง คะแนนรวมผู้เล่น
     current_player = next(p for p in data if p["name"] == name)#loopเพื่อหาข้อมูลผู้เล่นปัจจุบัน(กรณีที่เป็นผู้เล่นใหม่)
-    print(f'🎯สรุปผลของ {name}: คะแนนรวม {current_player['score']} | win: {current_player['win']} | lose: {current_player['lose']}')
-    print(f'🏅อันดับของคุณคือ {data.index(current_player) + 1} จาก {len(data)} คน')#แสดงอันดับของผู้เล่น
+    print(f"🎯สรุปผลของ {name}: คะแนนรวม {current_player['score']} | win: {current_player['win']} | lose: {current_player['lose']}")
+    print(f"🏅อันดับของคุณคือ {data.index(current_player) + 1} จาก {len(data)} คน")#แสดงอันดับของผู้เล่น
 
     # print leaderboard
     print("\n🏆 LEADERBOARD TOP 5 🏆".center(60))
@@ -108,7 +108,7 @@ def game_play(random_word, random_category, level,point_rate):#ฟังก์�
     while player_round < round_limit:#ผู้เล่นทายได้ไม่เกิน6ครั้ง
         player_round += 1
         user_answer = input('ทายครั้งที่ {}: '.format(player_round)).upper() #รับคำตอบผู้เล่น
-        if len(user_answer) != len(random_word) or not user_answer.isalpha():#เช็คความยาวคำตอบ
+        if len(user_answer) != len(random_word) or not user_answer.isalpha() or not user_answer.isascii():#เช็คความยาวคำตอบ
             print(f'❌ คำตอบต้องมีความยาว {len(random_word)} ตัวอักษร และต้องเป็นตัวอักษร A-Z เท่านั้น')
             player_round -= 1 #ถ้าไม่ตรงเงื่อนไขจะไม่ถูกนับเป็นรอบ
             continue
