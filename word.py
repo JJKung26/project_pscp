@@ -8,7 +8,7 @@ WORDS_BY_LEVEL = {
     "food": ["PIZZA", "CANDY", "SALAD", "HONEY", "STEAK", "CREAM", "JUICE", "SAUCE", "PASTA", "TOAST", "SUGAR", "WATER", "BREAD"],
     "countries": ["JAPAN", "CHINA", "EGYPT", "SPAIN", "KOREA", "NEPAL", "CHILE", "ITALY", "WALES", "QATAR"],
     "jobs": ["NURSE", "PILOT", "GUARD", "MINER", "ACTOR", "AGENT", "COACH"],
-    "sports": ["CHESS", "RUGBY", "SKATE", "DARTS", "RODEO", "BOXING"],
+    "sports": ["CHESS", "RUGBY", "SKATE", "DARTS", "RODEO"],
     "nature": ["RIVER", "OCEAN", "BEACH", "STORM", "CLOUD", "STONE", "RAINY", "WINDS", "ROCKS", "MOUNT", "FLORA"],
     "time": ["MONTH", "HOURS", "EARLY", "NIGHT", "DATES", "EVENT", "LATER"],
     "emotions": ["HAPPY", "ANGRY", "PROUD", "WORRY", "SORRY", "SHOCK", "GLORY"],
