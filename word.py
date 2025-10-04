@@ -1,4 +1,4 @@
-WORDS_BY_LEVEL = {
+ALL_WORDS = {
     "animals": ["PANDA", "SHEEP", "HORSE", "GOOSE", "EAGLE", "ZEBRA", "WHALE", "HIPPO", "RHINO", "SNAIL", "HYENA", "SHARK", "SLOTH"],
     "fruits": ["APPLE", "MANGO", "GRAPE", "LEMON", "PEACH", "MELON", "OLIVE", "BERRY", "GUAVA", "PLUMS"],
     "objects": ["TABLE", "CHAIR", "PHONE", "CLOCK", "KNIFE", "GLASS", "PLATE", "RADIO", "SPOON", "BRUSH", "PAPER", "SOFAS"],
